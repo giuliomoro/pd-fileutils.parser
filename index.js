@@ -39,8 +39,7 @@ var sanitiseString = function(arg) {
 
 // Parses argument to a string or a number.
 var parseArg = exports.parseArg = function(arg) {
-  var parsed = pdParseFloat(arg)
-  if (_.isNumber(parsed) && !isNaN(parsed)) return parsed
+  if (_.isNumber(arg) && !isNaN(arg)) return arg
   else if (_.isString(arg)) {
     return sanitiseString(arg)
   } else throw new Error('couldn\'t parse arg ' + arg)
