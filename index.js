@@ -130,8 +130,13 @@ var recursParse = function(txt) {
     } else if (chunkType === '#X') {
       var elementType = tokens[1]
 
+      // ---- declare: ignore the declaration  ---- //
+      if (elementType === 'declare') {
+        // (if a obj declare is present, it will be handled as a regular object below)
+
+
       // ---- restore : ends a canvas definition ---- //
-      if (elementType === 'restore') {
+      } else if (elementType === 'restore') {
         var layout = {x: parseInt(tokens[2], 10), y: parseInt(tokens[3], 10)}
           , canvasType = tokens[4]
           , args = []
