@@ -26,19 +26,23 @@ var _ = require('underscore')
 // Helper function to reverse a string
 var _reverseString = function(s) { return s.split("").reverse().join("") }
 
+var sanitiseString = function(arg) {
+  var matched, arg = arg.substr(0)
+  // Unescape special characters
+  arg = arg.replace(escapedCommaVarReGlob, ',')
+  arg = arg.replace(escapedSemicolonVarReGlob, ';')
+  while (matched = escapedDollarVarReGlob.exec(arg)) {
+    arg = arg.replace(matched[0], matched[1])
+  }
+  return arg
+}
+
 // Parses argument to a string or a number.
 var parseArg = exports.parseArg = function(arg) {
   var parsed = pdParseFloat(arg)
   if (_.isNumber(parsed) && !isNaN(parsed)) return parsed
   else if (_.isString(arg)) {
-    var matched, arg = arg.substr(0)
-    // Unescape special characters
-    arg = arg.replace(escapedCommaVarReGlob, ',')
-    arg = arg.replace(escapedSemicolonVarReGlob, ';')
-    while (matched = escapedDollarVarReGlob.exec(arg)) {
-      arg = arg.replace(matched[0], matched[1])
-    }
-    return arg
+    return sanitiseString(arg)
   } else throw new Error('couldn\'t parse arg ' + arg)
 }
 
@@ -186,12 +190,19 @@ var recursParse = function(txt) {
           }
         }
 
+        var pushArgs;
+        if (elementType === 'text')
+          // if this is a comment, no need to parse it recursively
+          pushArgs = [sanitiseString(args[0])]
+        else
+          pushArgs = parseArgs(args);
+
         // Add the object to the graph
         patch.nodes.push({
           id: nextId(),
           proto: proto,
           layout: layout,
-          args: parseArgs(args)
+          args: pushArgs,
         })
 
       // ---- array : start of an array definition ---- //
