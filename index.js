@@ -12,7 +12,7 @@
 // See http://puredata.info/docs/developer/PdFileFormat for the Pd file format reference
 
 var _ = require('underscore')
-  , NODES = ['obj', 'floatatom', 'symbolatom', 'msg', 'text']
+  , NODES = ['obj', 'floatatom', 'listbox', 'symbolatom', 'msg', 'text']
   // Regular expression to split tokens in a message.
   , tokensRe = / |\r\n?|\n/
   , afterCommaRe = /,(?!\\)/
@@ -272,6 +272,11 @@ var recursParse = function(txt) {
 var parseControls = function(proto, args, layout) {
 
   if (proto === 'floatatom') {
+    // <width> <lower_limit> <upper_limit> <label_pos> <label> <receive> <send>
+    layout.width = args[0] ; layout.labelPos = args[3] ; layout.label = args[4]
+    // <lower_limit> <upper_limit> <receive> <send>
+    args = [args[1], args[2], args[5], args[6]]
+  } else if (proto === 'listbox') {
     // <width> <lower_limit> <upper_limit> <label_pos> <label> <receive> <send>
     layout.width = args[0] ; layout.labelPos = args[3] ; layout.label = args[4]
     // <lower_limit> <upper_limit> <receive> <send>
