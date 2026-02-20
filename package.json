@@ -1,6 +1,6 @@
 {
   "name": "pd-fileutils.parser",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "global": true,
   "description": "Pd file parser (see pd-fileutils)",
   "main": "index.js",
