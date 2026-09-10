@@ -239,7 +239,9 @@ var recursParse = function(txt) {
 
       // ---- coords : visual range of framsets ---- //
       } else if (elementType === 'coords') { // TODO ?
-      } else throw new Error('invalid element type for chunk #X : ' + elementType)
+	  // ---- f : not sure what this does ---- //
+      } else if (elementType === 'f') { // TODO ?
+      } else console.log(new Error('invalid element type for chunk #X : ' + elementType))
       
       nextLine()
     //================ #A : array data ================// 
